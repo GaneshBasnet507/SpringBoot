@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
