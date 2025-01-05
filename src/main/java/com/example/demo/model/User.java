@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.antlr.v4.runtime.Token;
 
 
-import javax.management.relation.Role;
 import java.util.*;
 
 @Getter
@@ -55,7 +53,7 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -108,6 +106,7 @@ public class User {
             joinColumns = @JoinColumn(name = " user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+
     @JsonIgnore
     private Set<Roles> roles;
     public Set<Roles> getRoles()
