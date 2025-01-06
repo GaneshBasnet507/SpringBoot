@@ -26,7 +26,7 @@ public class Order {
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
     private List<Books> book = new ArrayList<>();
-
+    public Order() { }
     public Order(User user, double totalAmount, boolean status, List<Books> book) {
         this.user = user;
         this.totalAmount = totalAmount;
@@ -50,7 +50,7 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 

@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     int deleteUserByEmail(String email);
     @Query("SELECT  u FROM User u JOIN FETCH u.roles WHERE u.userName = ?1 OR u.phoneNo = ?2 OR u.email = ?3")
     Optional<User> findByEmailOrPhoneNoOrUserName(String userName, String phoneNo, String email);
-    @Query("SELECT  u FROM User u  WHERE u.userName = :userName")
+    @Query("SELECT  u FROM User u  WHERE  u.userName = :userName")
     Optional<User> findByUserName(String userName);
 //    org.springframework.security.core.userdetails.User getUserByUserName(String username);
 }

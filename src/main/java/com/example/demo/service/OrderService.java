@@ -64,5 +64,53 @@ public class OrderService {
         return order;
     }
 
+    public Order retrieveOrder(String username) {
+        if (username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
+
+        Optional<User> userOptional = userRepository.findByUserName(username);
+        if (!userOptional.isPresent()) {
+            throw new IllegalArgumentException("No user found with username: " + username);
+        }
+        User user = userOptional.get();
+        int userId = (int) user.getId();
+
+        Optional<Order> orderOptional = orderRepository.findByUserId(userId);
+        if (!orderOptional.isPresent()) {
+            throw new IllegalArgumentException("No order found with that user ID: " + userId);
+        }
+
+        Order userOrder = orderOptional.get();
+        boolean status = userOrder.getStatus();
+
+        return userOrder;
+    }
+
+    public Order updateOrderStatus(int userId, String username) {
+        Optional<User> userOptional = userRepository.findByUserName(username);
+        if (!userOptional.isPresent()) {
+            throw new IllegalArgumentException("No user found with that username" + username);
+        }
+        User user = userOptional.get();
+        if (user.getRole().equals("ADMIN")) {
+            Optional<Order> orderOptional = orderRepository.findByUserId(userId);
+            if (!orderOptional.isPresent()) {
+                throw new IllegalArgumentException("No order found with ID: " + userId);
+            }
+            Order order = orderOptional.get();
+            order.setStatus(true);
+            orderRepository.save(order);
+            return order;
+        } else {
+            throw new IllegalArgumentException("User does not have permission to update order status");
+
+        }
+
+    }
+
 }
+
+
+
 
