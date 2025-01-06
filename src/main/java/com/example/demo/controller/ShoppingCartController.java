@@ -1,16 +1,15 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Books;
 import com.example.demo.model.ShoppingCart;
 import com.example.demo.service.BooksService;
 import com.example.demo.service.ShoppingCartService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,6 +39,7 @@ public class ShoppingCartController {
     @PostMapping("/clear-cart")
     public void clearCart(HttpServletRequest request){
         shoppingCartService.clearCart(request);
+
     }
 //    @PostMapping("/add-book")
 //    public ResponseEntity<String> register(@RequestBody ShoppingCart shoppingCart, String title, HttpServletRequest request) {

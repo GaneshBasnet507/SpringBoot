@@ -34,6 +34,10 @@ public class Books {
 
     @ManyToMany(mappedBy = "books")
     private List<ShoppingCart> shoppingCarts = new ArrayList<>();
+    @ManyToMany(mappedBy = "book")
+    private List<Order> orders = new ArrayList<>();
+    // Default constructor
+    public Books() { }
 
 
     public int getId() {

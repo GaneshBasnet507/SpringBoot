@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Books;
+import com.example.demo.model.Order;
 import com.example.demo.model.ShoppingCart;
 import com.example.demo.model.User;
 import com.example.demo.repository.BooksRepository;
@@ -94,13 +95,13 @@ public class ShoppingCartService {
         }
         String userName = (String) session.getAttribute("username");
         Optional<User> userOptional = userRepository.findByUserName(userName);
-        if(!userOptional.isPresent()){
+        if (!userOptional.isPresent()) {
             throw new IllegalArgumentException("No user found with username: " + userName);
 
         }
         User user = userOptional.get();
         Optional<ShoppingCart> shoppingCarts = shoppingCartRepository.findByUserId(user.getId());
-        if(!shoppingCarts.isPresent()){
+        if (!shoppingCarts.isPresent()) {
             throw new IllegalArgumentException("No shopping cart found with username: " + userName);
         }
         ShoppingCart cart = shoppingCarts.get();
@@ -110,6 +111,8 @@ public class ShoppingCartService {
 
 
     }
+
+
 
 }
 //    public String saveBookDetails(ShoppingCart shoppingCart, HttpServletRequest request, String title) {
