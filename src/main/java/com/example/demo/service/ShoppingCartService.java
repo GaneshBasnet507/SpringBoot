@@ -29,6 +29,9 @@ public class ShoppingCartService {
         this.userRepository = userRepository;
         this.booksRepository = booksRepository;
     }
+    public List<ShoppingCart> getAll() {
+        return shoppingCartRepository.findAll();
+    }
 
     @Transactional
     public ShoppingCart addToCart(HttpServletRequest request, String title) {
@@ -36,17 +39,20 @@ public class ShoppingCartService {
         if (session == null) {
             throw new IllegalArgumentException("Session does not exist. You have to login first.");
         }
+
         Optional<Books> bookOptional = booksRepository.findByTitle(title);
         if (!bookOptional.isPresent()) {
             throw new IllegalArgumentException("No book found with title: " + title);
         }
         Books book = bookOptional.get();
+
         String userName = (String) session.getAttribute("username");
         Optional<User> userOptional = userRepository.findByUserName(userName);
         if (!userOptional.isPresent()) {
             throw new IllegalArgumentException("No user found with username: " + userName);
         }
         User user = userOptional.get();
+
         Optional<ShoppingCart> cartOptional = shoppingCartRepository.findByUserId(user.getId());
         ShoppingCart cart;
         if (cartOptional.isPresent()) {
@@ -56,8 +62,10 @@ public class ShoppingCartService {
         } else {
             cart = new ShoppingCart(user, new ArrayList<>(Collections.singletonList(book)), book.getPrice());
         }
+
         return shoppingCartRepository.save(cart);
     }
+
 
     public ShoppingCart removeBook(HttpServletRequest request, String title) {
         HttpSession session = request.getSession(false);

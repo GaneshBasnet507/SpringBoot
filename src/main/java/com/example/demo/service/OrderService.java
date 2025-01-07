@@ -82,7 +82,7 @@ public class OrderService {
         }
 
         Order userOrder = orderOptional.get();
-        boolean status = userOrder.getStatus();
+
 
         return userOrder;
     }

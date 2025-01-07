@@ -1,5 +1,10 @@
 package com.example.demo.DTO;
 
+import com.example.demo.model.Order;
+import lombok.Getter;
+import lombok.Setter;
+
+
 public class OrderDto {
     private int id;
     private double totalAmount;
@@ -33,5 +38,17 @@ public class OrderDto {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public OrderDto() {
+    }
+
+    public static OrderDto mapToOrderDto(Order order) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setTotalAmount(order.getTotalAmount());
+        orderDto.setStatus(order.getStatus());
+        orderDto.setId(order.getId());
+        return orderDto;
+
     }
 }

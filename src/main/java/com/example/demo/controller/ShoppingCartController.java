@@ -1,16 +1,16 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.CartDto;
 import com.example.demo.model.ShoppingCart;
 import com.example.demo.service.BooksService;
 import com.example.demo.service.ShoppingCartService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/shoppingCart")
@@ -40,6 +40,11 @@ public class ShoppingCartController {
     public void clearCart(HttpServletRequest request){
         shoppingCartService.clearCart(request);
 
+    }
+    @GetMapping("/carts")
+    public List<CartDto> getAllCart(){
+        List<ShoppingCart> carts = shoppingCartService.getAll();
+        return carts.stream().map(CartDto.mapToCarts).collect(Collectors.toList());
     }
 //    @PostMapping("/add-book")
 //    public ResponseEntity<String> register(@RequestBody ShoppingCart shoppingCart, String title, HttpServletRequest request) {

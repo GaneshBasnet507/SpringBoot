@@ -40,8 +40,8 @@ public class OrderController {
         return orderService.placingOrder(request);
     }
 
-    @GetMapping("/retrieve-order/{userId}")
-    public Order userOrder(HttpServletRequest request) {
+    @GetMapping("/retrieve-order")
+    public OrderDto userOrder(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw new IllegalArgumentException("Session does not exist. You have to login first.");
@@ -51,11 +51,8 @@ public class OrderController {
         if (username == null) {
             throw new IllegalArgumentException("No username found in session");
         }
-        return orderService.retrieveOrder(username);
-//    public ResponseEntity<OrderDto> retrieveOrder(@PathVariable int userId, HttpServletRequest request) {
-//        List<OrderDto> orderDtos =orderService.retrieveOrder(userId,request);
-//        return new ResponseEntity<>(orderDtos, HttpStatus.OK);
-
+        Order order = orderService.retrieveOrder(username);
+        return OrderDto.mapToOrderDto(order);
     }
 
 
