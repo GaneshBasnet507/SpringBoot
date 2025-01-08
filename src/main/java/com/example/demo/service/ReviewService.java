@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,14 +53,13 @@ public class ReviewService {
         if (userOrder.isEmpty()) {
             throw new IllegalArgumentException("No Order found with that userId: " + userId);
         }
-
         Order order = userOrder.get();
-        Optional<Books> booksOptional = booksRepository.findById(review.getBooks().getId());
-        if (!booksOptional.isPresent()) {
-            throw new IllegalArgumentException("No Book found with ID: " + review.getBooks().getId());
-        }
-        Books book = booksOptional.get();
-        Review newReview = new Review(user, book, review.getRating(), review.getComment(), review.getAvg_rating());
+        List<Books> books = order.getBook();
+        Books book = books.get(0);
+
+        System.out.println(order);
+        Review newReview = new Review(user,book, review.getRating(), review.getComment(), review.getAvg_rating());
+        Review saveReview = reviewRepository.save(newReview);
         return reviewRepository.save(newReview);
     }
 }

@@ -31,20 +31,23 @@ public class ShoppingCartController {
         String title = request.get("title");
         return shoppingCartService.addToCart(httpRequest, title);
     }
+
     @PostMapping("/remove-book")
     public ShoppingCart removeBook(@RequestBody Map<String, String> request, HttpServletRequest httpRequest) {
         String title = request.get("title");
         return shoppingCartService.removeBook(httpRequest, title);
     }
+
     @PostMapping("/clear-cart")
-    public void clearCart(HttpServletRequest request){
+    public void clearCart(HttpServletRequest request) {
         shoppingCartService.clearCart(request);
 
     }
+
     @GetMapping("/carts")
-    public List<CartDto> getAllCart(){
+    public List<CartDto> getAllCart() {
         List<ShoppingCart> carts = shoppingCartService.getAll();
-        return carts.stream().map(CartDto.mapToCarts).collect(Collectors.toList());
+        return CartDto.mapToCarts(carts);
     }
 //    @PostMapping("/add-book")
 //    public ResponseEntity<String> register(@RequestBody ShoppingCart shoppingCart, String title, HttpServletRequest request) {

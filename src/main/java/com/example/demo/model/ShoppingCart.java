@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Setter
@@ -49,6 +47,7 @@ public class ShoppingCart {
                 .sum();
     }
 
+
     public int getId() {
         return id;
     }
@@ -80,4 +79,6 @@ public class ShoppingCart {
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
+
+
 }

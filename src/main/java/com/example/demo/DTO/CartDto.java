@@ -1,7 +1,20 @@
 package com.example.demo.DTO;
 
+import com.example.demo.model.Books;
+import com.example.demo.model.ShoppingCart;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
+
 public class CartDto {
+
+    public CartDto() {
+    }
+
     private int id;
+    private String title;
 
 
     private double total_amount;
@@ -9,8 +22,9 @@ public class CartDto {
 
     private int user_id;
 
-    public CartDto(int id, double total_amount, int user_id) {
+    public CartDto(int id, String title, double total_amount, int user_id) {
         this.id = id;
+        this.title = title;
         this.total_amount = total_amount;
         this.user_id = user_id;
     }
@@ -21,6 +35,14 @@ public class CartDto {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public double getTotal_amount() {
@@ -37,5 +59,22 @@ public class CartDto {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    public static List<CartDto> mapToCarts(List<ShoppingCart> carts) {
+        List<CartDto> cartDtoList = new ArrayList<>();
+        for (ShoppingCart shoppingCart : carts) {
+            CartDto cartDto = new CartDto();
+            cartDto.setId(shoppingCart.getId());
+            List<Books> books = shoppingCart.getBooks();
+             for (int i=0; i<books.size(); i++){
+                 cartDto.setTitle(shoppingCart.getBooks().get(i).getTitle());
+             }
+            cartDto.setTotal_amount(shoppingCart.getTotalAmount());
+            int user_id = (int) shoppingCart.getUser().getId();
+            cartDto.setUser_id(user_id);
+            cartDtoList.add(cartDto);
+        }
+        return cartDtoList;
     }
 }

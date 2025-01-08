@@ -32,7 +32,9 @@ public class Review {
         this.comment = comment;
         this.avg_rating = avg_rating;
     }
+public void avgRating(){
 
+}
     public User getUser() {
         return user;
     }
@@ -46,7 +48,7 @@ public class Review {
     }
 
     public void setBooks(Books books) {
-        this.books = books;
+        this.books =books;
     }
 
     public int getRating() {

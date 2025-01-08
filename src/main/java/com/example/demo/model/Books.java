@@ -39,6 +39,16 @@ public class Books {
     // Default constructor
     public Books() { }
 
+    public Books(int id, String title, String author, String genre, Double price, String quantity, List<ShoppingCart> shoppingCarts, List<Order> orders) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.price = price;
+        this.quantity = quantity;
+        this.shoppingCarts = shoppingCarts;
+        this.orders = orders;
+    }
 
     public int getId() {
         return id;
