@@ -56,10 +56,17 @@ public class ReviewService {
         Order order = userOrder.get();
         List<Books> books = order.getBook();
         Books book = books.get(0);
+        int bookId = book.getId();
 
         System.out.println(order);
-        Review newReview = new Review(user,book, review.getRating(), review.getComment(), review.getAvg_rating());
-        Review saveReview = reviewRepository.save(newReview);
+        Review newReview = new Review(user, book, review.getRating(), review.getComment(),review.getAvg_rating() );
         return reviewRepository.save(newReview);
+    }
+
+    public double findAvgRating(int bookId) {
+        Double avgRating = reviewRepository.findAverageRating(bookId);
+        Review review = new Review();
+        review.setAvg_rating(avgRating);
+        return avgRating;
     }
 }

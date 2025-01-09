@@ -170,7 +170,7 @@ public class UserController {
     public ResponseEntity<String> authenticate(@RequestBody Map<String, String> loginData, HttpServletRequest request) {
         String identifier = loginData.get("identifier");
         String password = loginData.get("password");
-        Optional<User> existingUser = userService.findUserByEmailUserNamePhoneNo(identifier);
+            Optional<User> existingUser = userService.findUserByEmailUserNamePhoneNo(identifier);
         if (existingUser.isPresent()) {
             User foundUser = existingUser.get();
             if (foundUser.getPassword().equals(password)) {

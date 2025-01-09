@@ -68,6 +68,7 @@ public void avgRating(){
     }
 
     public double getAvg_rating() {
+
         return avg_rating;
     }
 

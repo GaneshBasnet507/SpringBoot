@@ -75,7 +75,7 @@ public class ReviewDto {
         reviewDto.setComment(review.getComment());
         reviewDto.setRating(review.getRating());
         reviewDto.setBook_id(review.getBooks().getId());
-       reviewDto.setUser_id((int) review.getUser().getId());
+        reviewDto.setUser_id((int) review.getUser().getId());
         return reviewDto;
 
     }

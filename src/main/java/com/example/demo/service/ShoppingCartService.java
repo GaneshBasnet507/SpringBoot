@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Books;
-import com.example.demo.model.Order;
 import com.example.demo.model.ShoppingCart;
 import com.example.demo.model.User;
 import com.example.demo.repository.BooksRepository;
@@ -13,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShoppingCartService {
@@ -29,6 +31,7 @@ public class ShoppingCartService {
         this.userRepository = userRepository;
         this.booksRepository = booksRepository;
     }
+
     public List<ShoppingCart> getAll() {
         return shoppingCartRepository.findAll();
     }
@@ -119,7 +122,6 @@ public class ShoppingCartService {
 
 
     }
-
 
 
 }
