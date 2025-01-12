@@ -47,6 +47,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
+
         if (userService.existsByEmail(user.getEmail())) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
@@ -235,7 +236,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not registered");
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody User user, HttpServletRequest request) {
         int result = userService.updateUser(user, request);
         if (result > 0) {

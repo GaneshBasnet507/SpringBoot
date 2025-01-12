@@ -71,7 +71,7 @@ public class UserService {
         if(!userName.equals(user.getUserName())){
             throw new IllegalArgumentException("You donot have Authorized .");
         }
-        return userRepository.updateUserDetails(user.getFullName(), user.getAddress(), user.getPhoneNo(), user.getPassword(), user.getEmail());
+        return userRepository.updateUserDetails(user.getFullName(), user.getUserName(),user.getAddress(), user.getPhoneNo(), user.getPassword(), user.getEmail());
     }
     public int deleteUser(String email, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
