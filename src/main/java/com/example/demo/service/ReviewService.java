@@ -59,7 +59,8 @@ public class ReviewService {
         int bookId = book.getId();
 
         System.out.println(order);
-        Review newReview = new Review(user, book, review.getRating(), review.getComment(),review.getAvg_rating() );
+        Double avgRating = reviewRepository.findAverageRating(bookId);
+        Review newReview = new Review(user, book, review.getRating(), review.getComment(),review.getAvg_rating());
         return reviewRepository.save(newReview);
     }
 

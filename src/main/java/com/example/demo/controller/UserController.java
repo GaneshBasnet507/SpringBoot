@@ -1,19 +1,16 @@
 package com.example.demo.controller;
+
+import com.example.demo.DTO.UpdatePassword;
+import com.example.demo.DTO.UpdateUsername;
 import com.example.demo.model.Roles;
 import com.example.demo.model.User;
-
-import com.example.demo.model.Employee;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.DTO.UpdateUsername;
-import com.example.demo.DTO.UpdatePassword;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,18 +23,19 @@ public class UserController {
     private EmailService emailservice;
     @Autowired
     private CodeStoreService codeStoreService;
-//    @Autowired
+    //    @Autowired
 //    private PasswordEncoder passwordEncoder;
     @Autowired
     private final RoleService roleService;
     private CodeGenerator codeGenerator;
 
-    public UserController(UserService userService, RoleService roleService){
+    public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
+
     @GetMapping("")
-    public String print(){
+    public String print() {
         return "testing ";
     }
 
@@ -88,8 +86,9 @@ public class UserController {
         userService.saveUserDetails(user);
         return ResponseEntity.ok("User registered successfully");
     }
+
     @PostMapping("/create-user")
-    public ResponseEntity<String>createUser(@RequestBody User user){
+    public ResponseEntity<String> createUser(@RequestBody User user) {
         if (userService.existsByUserName(user.getUserName())) {
             return ResponseEntity.badRequest().body("Username already exists");
         }
@@ -115,40 +114,39 @@ public class UserController {
     }
 
     @PostMapping("/generateCode")
-    public ResponseEntity<String> generateCode(@RequestParam String email){
+    public ResponseEntity<String> generateCode(@RequestParam String email) {
         Optional<User> userOptional = userService.findUserByEmail((email));
-        if(userOptional.isPresent()){
+        if (userOptional.isPresent()) {
             String code = codeGenerator.generateCode();
-            codeStoreService.storeCode(email,code);
-            emailservice.sendEmail(email,"your verification code:","your code:" + code);
+            codeStoreService.storeCode(email, code);
+            emailservice.sendEmail(email, "your verification code:", "your code:" + code);
             return ResponseEntity.ok("code sent via email");
-        }
-        else{
+        } else {
             return ResponseEntity.status(404).body("email not found");
         }
     }
+
     @PostMapping("/updateUsername")
     public ResponseEntity<String> verifyCode(@RequestBody UpdateUsername request) {
         String storedCode = codeStoreService.getCode(request.getEmail());
-        if (storedCode != null && storedCode.equals(request.getCode())){
+        if (storedCode != null && storedCode.equals(request.getCode())) {
             codeStoreService.removeCode(request.getEmail());
             Optional<User> userOptional = userService.findUserByEmail(request.getEmail());
-            if (userOptional.isPresent())
-            {
+            if (userOptional.isPresent()) {
                 User user = userOptional.get();
                 user.setUserName(request.getNewUsername());
                 userService.saveUserDetails(user);
                 return ResponseEntity.ok("Username updated successfully.");
-            }
-            else{
+            } else {
                 return ResponseEntity.status(404).body("User not found.");
             }
         } else {
-                return ResponseEntity.status(400).body("Invalid or expired code.");
-            }
+            return ResponseEntity.status(400).body("Invalid or expired code.");
+        }
     }
+
     @PostMapping("/updatePassword")
-    public ResponseEntity<String> verifycodeforPassword(@RequestBody UpdatePassword request){
+    public ResponseEntity<String> verifycodeforPassword(@RequestBody UpdatePassword request) {
         String storedCode = codeStoreService.getCode(request.getEmail());
         if (storedCode != null && storedCode.equals(request.getCode())) {
             codeStoreService.removeCode(request.getEmail());
@@ -161,16 +159,16 @@ public class UserController {
             } else {
                 return ResponseEntity.status(404).body("User not found.");
             }
+        } else {
+            return ResponseEntity.status(400).body("Invalid or expired code.");
         }
-            else{
-                return ResponseEntity.status(400).body("Invalid or expired code.");
-            }
-        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<String> authenticate(@RequestBody Map<String, String> loginData, HttpServletRequest request) {
         String identifier = loginData.get("identifier");
         String password = loginData.get("password");
-            Optional<User> existingUser = userService.findUserByEmailUserNamePhoneNo(identifier);
+        Optional<User> existingUser = userService.findUserByEmailUserNamePhoneNo(identifier);
         if (existingUser.isPresent()) {
             User foundUser = existingUser.get();
             if (foundUser.getPassword().equals(password)) {
@@ -189,79 +187,84 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not registered");
     }
+
     @GetMapping("/search")
-    public ResponseEntity<?>search(@RequestParam String username){
+    public ResponseEntity<?> search(@RequestParam String username) {
         Optional<User> existingUser = userService.findByUser(username);
-        if(existingUser.isPresent()) {
+        if (existingUser.isPresent()) {
 
             return ResponseEntity.ok(existingUser.get());
-        }
-        else{
+        } else {
             return ResponseEntity.badRequest().body("User Doesnot Exits");
         }
 
     }
+
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request){
+    public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if(session!=null){
+        if (session != null) {
             session.invalidate();
             return ResponseEntity.ok("Successfully logout");
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You are not login");
         }
 
     }
+
     @PostMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> password){
+    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> password) {
         String identifier = password.get("identifier");
         String oldPassword = password.get("oldPassword");
         String newPassword = password.get("newPassword");
         Optional<User> existingUser = userService.findUserByEmailUserNamePhoneNo(identifier);
-        if(existingUser.isPresent()){
+        if (existingUser.isPresent()) {
             User foundUser = existingUser.get();
-            if(foundUser.getPassword().equals(oldPassword)){
+            if (foundUser.getPassword().equals(oldPassword)) {
                 if (!userService.isPasswordValid(newPassword)) {
                     return ResponseEntity.badRequest().body("Password is invalid");
                 }
                 foundUser.setPassword(newPassword);
                 userService.saveUserDetails(foundUser);
-               emailservice.sendEmailForPassport(identifier,"your passport sucessfully"," password changed");
+                emailservice.sendEmailForPassport(identifier, "your passport sucessfully", " password changed");
                 return ResponseEntity.ok("Successfully change password");
-            }
-            else{
+            } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
             }
-        } return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not registered");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not registered");
     }
-  @PostMapping("/update")
-  public ResponseEntity<String>updateUser(@RequestBody User user,HttpServletRequest request){
-        int result = userService.updateUser(user,request);
-        if(result>0){
-            return  ResponseEntity.ok("User details update successfully");
-        }else{
+
+    @PostMapping("/update")
+    public ResponseEntity<String> updateUser(@RequestBody User user, HttpServletRequest request) {
+        int result = userService.updateUser(user, request);
+        if (result > 0) {
+            return ResponseEntity.ok("User details update successfully");
+        } else {
             return ResponseEntity.status(400).body("failed to update user details");
         }
-  }
-  @GetMapping("/getUserList")
- public List<User> getUser(){
-        return  userService.getAllUser();
+    }
 
-  }
-  @DeleteMapping("/delete")
-    public ResponseEntity<String>deleteUser(@RequestParam String email,HttpServletRequest request) {
+    @GetMapping("/getUserList")
+    public List<User> getUser() {
+        return userService.getAllUser();
 
-      try {
-          int result = userService.deleteUser(email,request);
-          if (result > 0) {
-              return ResponseEntity.ok("User deleted successfully");
-          } else {
-              return ResponseEntity.status(400).body("Failed to delete user");
-          }
-      } catch (IllegalArgumentException e) {
-          return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-      }
-  }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(@RequestParam String email, HttpServletRequest request) {
+
+        try {
+            int result = userService.deleteUser(email, request);
+            if (result > 0) {
+                return ResponseEntity.ok("User deleted successfully");
+            } else {
+                return ResponseEntity.status(400).body("Failed to delete user");
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
 
 }
 
