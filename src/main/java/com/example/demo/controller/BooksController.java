@@ -37,9 +37,8 @@ public class BooksController {
         List<Books> books = booksService.getAllBooks();
         return books.stream().map(BookDto:: mapToBooks).collect(Collectors.toList());
     }
-        @PostMapping("/update")
+        @PutMapping("/update")
         public ResponseEntity<String> updateBook (@RequestBody Books books, HttpServletRequest request){
-            HttpSession session = request.getSession(false);
             int result = booksService.updateBook(books, request);
             if (result > 0) {
                 return ResponseEntity.ok("Book details update successfully");
@@ -65,6 +64,7 @@ public class BooksController {
         public ResponseEntity<?> search (@RequestParam String identifier){
             System.out.println(identifier);
             List<Books> books = booksService.findByTitleAuthorGenre(identifier);
+
 
             if (!books.isEmpty()) {
                 return ResponseEntity.ok(books);

@@ -239,6 +239,7 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<String> updateUser(@RequestBody User user, HttpServletRequest request) {
         int result = userService.updateUser(user, request);
+
         if (result > 0) {
             return ResponseEntity.ok("User details update successfully");
         } else {

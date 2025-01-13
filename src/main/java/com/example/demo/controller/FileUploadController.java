@@ -40,7 +40,7 @@ public class FileUploadController {
            redirectAttributes.addFlashAttribute("message", "Error uploading file: " + e.getMessage());
        }
 
-        return "redirect:/";
+        return "Successful upload files!";
 
     }
 }

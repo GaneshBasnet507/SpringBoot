@@ -89,6 +89,7 @@ public class BookDto {
         bookDto.setAuthor(books.getAuthor());
         bookDto.setGenre(books.getGenre());
         bookDto.setPrice(books.getPrice());
+        bookDto.setQuantity(books.getQuantity());
         return bookDto;
     }
 }

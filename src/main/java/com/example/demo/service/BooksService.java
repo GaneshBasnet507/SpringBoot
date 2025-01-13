@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.DTO.BookDto;
 import com.example.demo.model.Books;
 import com.example.demo.repository.BooksRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -37,20 +39,22 @@ public class BooksService {
             return "Insert successfully";
             }
     }
-    public int updateBook(Books books,HttpServletRequest request){
+    @Transactional
+    public int updateBook(Books books, HttpServletRequest request){
         HttpSession session = request.getSession(false);
         if(session == null){
             System.out.println("Session does not exist");
             throw new IllegalArgumentException("Session does not exist. You have to login first");
         }
         String userName = (String) session.getAttribute("username");
+        System.out.println(userName);
         Set<String> roles = (Set<String>) session.getAttribute("role");
         if(userName == null || roles == null || !roles.contains("ADMIN")){
-            throw new IllegalArgumentException("You donNot have User role privileges.");
+            throw new IllegalArgumentException("You don't have Admin role privileges.");
         }
         int quantity = parseInt(books.getQuantity());
         double price = books.getPrice();
-        return booksRepository.updateBookDetails(books.getTitle(),books.getAuthor(), books.getGenre(), price, quantity);
+        return booksRepository.updateBookDetails(books.getId(),books.getTitle(),books.getAuthor(), books.getGenre(), price, quantity);
     }
     public int deleteBook(int id, HttpServletRequest request) {
         HttpSession session = request.getSession(false);

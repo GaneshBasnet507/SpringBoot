@@ -30,7 +30,8 @@ public class ReviewController {
         return reviewService.addUserReview(review,request);
     }
     @GetMapping("/avg-rating/{bookId}")
-    public double getAvg(@PathVariable int bookId){
+    public double getAvg(@PathVariable int bookId)  {
         return reviewService.findAvgRating(bookId);
     }
+
 }
